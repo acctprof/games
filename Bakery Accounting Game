@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakery Accounting Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .question { margin-bottom: 20px; font-size: 18px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 10px; background-color: lightgray; border: none; cursor: pointer; }
+        .option:hover { background-color: gray; color: white; }
+        #score { font-size: 20px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Bakery Accounting Transactions Game</h1>
+    <div id="game">
+        <p class="question" id="question">Loading...</p>
+        <div class="options" id="options"></div>
+        <p id="score">Score: 0</p>
+    </div>
+
+    <script>
+        const transactions = [
+            { question: "Owner invests $50,000 in the business. What is the correct entry?", correct: "Cash & Owner's Capital", options: ["Cash & Owner's Capital", "Cash & Revenue", "Accounts Payable & Expense"] },
+            { question: "Purchased equipment for $20,000, paying $5,000 in cash and the rest on credit.", correct: "Equipment & Cash/Accounts Payable", options: ["Equipment & Cash/Accounts Payable", "Revenue & Accounts Payable", "Cash & Expenses"] },
+            { question: "Paid $2,000 in salaries.", correct: "Salaries Expense & Cash", options: ["Salaries Expense & Cash", "Cash & Revenue", "Owner's Capital & Cash"] },
+            { question: "Sold goods for $1,200 in cash.", correct: "Cash & Sales Revenue", options: ["Cash & Sales Revenue", "Inventory & Accounts Payable", "Accounts Payable & Cash"] },
+            { question: "Paid rent of $1,500.", correct: "Rent Expense & Cash", options: ["Rent Expense & Cash", "Cash & Accounts Payable", "Revenue & Cash"] }
+        ];
+
+        let score = 0;
+        let currentIndex = 0;
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const scoreElement = document.getElementById("score");
+
+        function loadQuestion() {
+            if (currentIndex >= transactions.length) {
+                questionElement.textContent = "Game Over! Final Score: " + score;
+                optionsElement.innerHTML = "";
+                return;
+            }
+            
+            let transaction = transactions[currentIndex];
+            questionElement.textContent = transaction.question;
+            optionsElement.innerHTML = "";
+            
+            transaction.options.forEach(option => {
+                let button = document.createElement("button");
+                button.textContent = option;
+                button.classList.add("option");
+                button.onclick = () => checkAnswer(option);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected) {
+            if (selected === transactions[currentIndex].correct) {
+                score += 10;
+                alert("Correct!");
+            } else {
+                alert("Incorrect. The correct answer is: " + transactions[currentIndex].correct);
+            }
+            currentIndex++;
+            scoreElement.textContent = "Score: " + score;
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
